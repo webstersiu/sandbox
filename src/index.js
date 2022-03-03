@@ -27,7 +27,7 @@ import {
   renderer.shadowMap.type = PCFSoftShadowMap;
   document.body.appendChild(renderer.domElement);
   
-  const light = new PointLight( new Color("#FFCB8E").convertSRGBToLinear().convertSRGBToLinear(), 80, 200 );
+  const light = new PointLight( new Color("#FFCB8E").convertSRGBToLinear(), 80, 200 );
   light.position.set(10, 20, 10);
   
   light.castShadow = true; 
@@ -55,16 +55,17 @@ import {
     envmap = rt.texture;
   
     let textures = {
-      dirt: await new TextureLoader().loadAsync("assets/dirt.png"),
-      dirt2: await new TextureLoader().loadAsync("assets/dirt2.jpg"),
-      grass: await new TextureLoader().loadAsync("assets/grass.jpg"),
-      sand: await new TextureLoader().loadAsync("assets/sand.jpg"),
-      water: await new TextureLoader().loadAsync("assets/water.jpg"),
-      stone: await new TextureLoader().loadAsync("assets/stone.png"),
+      dirt: await new TextureLoader().loadAsync("assets/dirt_hd.jpg"),
+      dirt2: await new TextureLoader().loadAsync("assets/dirt2_hd.jpg"),
+      grass: await new TextureLoader().loadAsync("assets/grass_hd.jpg"),
+      sand: await new TextureLoader().loadAsync("assets/sand_hd.jpg"),
+      water: await new TextureLoader().loadAsync("assets/water_hd.jpg"),
+      stone: await new TextureLoader().loadAsync("assets/stone_hd.jpg"),
     };
   
     const simplex = new SimplexNoise(); // optional seed as a string parameter
   
+    // generate the foundation
     for(let i = -20; i <= 20; i++) {
       for(let j = -20; j <= 20; j++) {
         let position = tileToPosition(i, j);
@@ -144,6 +145,12 @@ import {
     renderer.setAnimationLoop(() => {
       controls.update();
       renderer.render(scene, camera);
+
+      if (light.position.y < 100) {
+          light.position.y += 0.3;
+      } else {
+          light.position.y = 1;
+      }
     });
   })();
   
