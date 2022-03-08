@@ -41,13 +41,19 @@ controls.enableDamping = true;
     
     // Cloud
     let count = Math.floor(Math.pow(Math.random(), 0.45) * 4);
+    let clouds = [];
     for(let i = 0; i < count; i++) {
-        scene.add(new Cloud().deploy());
+        clouds.push(new Cloud());
+        scene.add(clouds[clouds.length - 1].deploy());
     }
   
     renderer.setAnimationLoop(() => {
         controls.update();
         renderer.render(scene, camera);
+
+        for(let i = 0; i < clouds.length; i++) {
+            clouds[i].move();
+        }
     });
 })();
   

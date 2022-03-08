@@ -25,7 +25,7 @@ class Cloud {
     }
 
     deploy() {
-        return new Mesh(
+        this.mesh = new Mesh(
             this.geo,
             new MeshStandardMaterial({
                 flatShading: true,
@@ -33,6 +33,12 @@ class Cloud {
                 opacity: 0.85,
             })
         );
+
+        return this.mesh;
+    }
+
+    move() {
+        this.mesh.position.x += 0.01;
     }
 }
 
