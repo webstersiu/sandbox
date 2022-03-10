@@ -1,8 +1,8 @@
-import { Mesh, MeshStandardMaterial, Color,  IcosahedronGeometry, MeshBasicMaterial} from 'https://cdn.skypack.dev/three@0.137';
+import { Mesh, Color,  IcosahedronGeometry, MeshBasicMaterial} from 'https://cdn.skypack.dev/three@0.137';
 
 
 class Sun {
-    
+    sun: Mesh;
     constructor() {
         //sun object
         const color = new Color("#FDB000");
