@@ -2,6 +2,7 @@ import { CylinderGeometry, DoubleSide, Mesh, MeshPhysicalMaterial } from 'https:
 import Base from './Base.js'
 
 class Floor extends Base {
+    mapFloor: Mesh;
     constructor() {
         super();
 

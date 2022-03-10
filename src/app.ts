@@ -1,8 +1,8 @@
 import { 
     WebGLRenderer, ACESFilmicToneMapping, sRGBEncoding, 
-    Color, PointLight, PerspectiveCamera,
-    Scene, PMREMGenerator, PCFSoftShadowMap,
-  } from 'https://cdn.skypack.dev/three@0.137';
+    Color, PerspectiveCamera,
+    Scene, PCFSoftShadowMap,
+} from 'https://cdn.skypack.dev/three@0.137';
 import { OrbitControls } from 'https://cdn.skypack.dev/three-stdlib@2.8.5/controls/OrbitControls';
 import Land from './components/Land.js';
 import Cloud from './components/Cloud.js';
@@ -50,10 +50,6 @@ controls.enableDamping = true;
     renderer.setAnimationLoop(() => {
         controls.update();
         renderer.render(scene, camera);
-
-        for(let i = 0; i < clouds.length; i++) {
-            clouds[i].move();
-        }
     });
 })();
   

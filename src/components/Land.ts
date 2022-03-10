@@ -1,4 +1,4 @@
-import { CylinderGeometry, BoxGeometry, Mesh, MeshPhysicalMaterial, Vector2 } from 'https://cdn.skypack.dev/three@0.137';
+import { CylinderGeometry, BoxGeometry, Mesh, MeshPhysicalMaterial, Vector2, BufferGeometry, Scene } from 'https://cdn.skypack.dev/three@0.137';
 import { mergeBufferGeometries } from 'https://cdn.skypack.dev/three-stdlib@2.8.5/utils/BufferGeometryUtils';
 import SimplexNoise from 'https://cdn.skypack.dev/simplex-noise';
 import Base from './Base.js';
@@ -6,6 +6,20 @@ import Tree from './Tree.js';
 import Stone from './Stone.js';
 
 class Land extends Base {
+    _stoneGeo: BufferGeometry;
+    _dirtGeo: BufferGeometry;
+    _dirt2Geo: BufferGeometry;
+    _sandGeo: BufferGeometry;
+    _grassGeo: BufferGeometry;
+
+    field: BoxGeometry;
+
+    STONE_HEIGHT: number;
+    DIRT_HEIGHT: number;
+    GRASS_HEIGHT: number;
+    SAND_HEIGHT: number;
+    DIRT2_HEIGHT: number;
+
     constructor() {
         super();
 
@@ -26,14 +40,14 @@ class Land extends Base {
         this.gen();
     }
     
-    hexGeometry(height, position) {
+    hexGeometry(height:number, position:any) {
         let geo  = new CylinderGeometry(1, 1, height, 6, 1, false);
         geo.translate(position.x, height * 0.5, position.y);
       
         return geo;
     }
 
-    hex(height, position) {
+    hex(height:number, position:any) {
         let geo = this.hexGeometry(height, position);
 
         if(height > this.STONE_HEIGHT) {
@@ -58,7 +72,7 @@ class Land extends Base {
         } 
     }
       
-    hexMesh(geo, map) {
+    hexMesh(geo:BufferGeometry, map:any) {
         let mat = new MeshPhysicalMaterial({ 
             flatShading: true,
             map
@@ -71,7 +85,7 @@ class Land extends Base {
         return mesh;
     }
 
-    tileToPosition(tileX, tileY) {
+    tileToPosition(tileX:number, tileY:number) {
         return new Vector2((tileX + (tileY % 2) * 0.5) * 1.77, tileY * 1.535);
     }
 
@@ -93,7 +107,7 @@ class Land extends Base {
         }
     }
 
-    deploy(scene) {
+    deploy(scene:Scene) {
         scene.add(this.hexMesh(this._stoneGeo, this.textures.stone));
         scene.add(this.hexMesh(this._grassGeo, this.textures.grass));
         scene.add(this.hexMesh(this._dirt2Geo, this.textures.dirt2));

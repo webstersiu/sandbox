@@ -1,6 +1,8 @@
 import { Color, PointLight } from 'https://cdn.skypack.dev/three@0.137';
 
 class Light{
+    light: PointLight;
+    
     constructor() {
         this.light = new PointLight( new Color("#FFCB8E").convertSRGBToLinear(), 80, 200 );
         this.light.position.set(10, 20, 10);
