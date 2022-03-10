@@ -8,7 +8,7 @@ class Floor extends Base {
         this.mapFloor = new Mesh(
             new CylinderGeometry(18.5, 18.5, this.MAX_HEIGHT * 0.1, 50),
             new MeshPhysicalMaterial({
-                map: this.textures.dirt2,
+                map: this.textures.wood,
                 side: DoubleSide,
             })
         );

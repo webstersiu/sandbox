@@ -12,6 +12,7 @@ class Base{
             water: new TextureLoader().load("../../assets/water_hd.jpg"),
             stone: new TextureLoader().load("../../assets/stone_hd.jpg"),
             snow: new TextureLoader().load("../../assets/snow_hd.png"),
+            wood: new TextureLoader().load("../../assets/wood.jpg"),
         };
     }
 }

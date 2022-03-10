@@ -6,7 +6,7 @@ class Foundation extends Base{
         super();
         
         this.mapContainer = new Mesh(
-            new CylinderGeometry(17.1, 17.1, this.MAX_HEIGHT * 0.25, 50, 1, true),
+            new CylinderGeometry(17.1, 17.1, this.MAX_HEIGHT * 0.15, 50, 1, true),
             new MeshPhysicalMaterial({
                 map: this.textures.dirt,
                 side: DoubleSide,
@@ -14,7 +14,7 @@ class Foundation extends Base{
         );
         this.mapContainer.receiveShadow = true;
         this.mapContainer.rotation.y = -Math.PI * 0.333 * 0.5;
-        this.mapContainer.position.set(0, this.MAX_HEIGHT * 0.125, 0);
+        this.mapContainer.position.set(0, this.MAX_HEIGHT, 0);
     }
 
     deploy() {
