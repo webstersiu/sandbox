@@ -1,7 +1,9 @@
 import { SphereGeometry } from 'https://cdn.skypack.dev/three@0.137';
 
 class Stone{
-    constructor(height, position) {
+    stone: SphereGeometry;
+
+    constructor(height:number, position:any) {
         const px = Math.random() * 0.4;
         const pz = Math.random() * 0.4;
         

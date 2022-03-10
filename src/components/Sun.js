@@ -2,6 +2,7 @@ import { Mesh, MeshStandardMaterial, Color,  IcosahedronGeometry, MeshBasicMater
 
 
 class Sun {
+    
     constructor() {
         //sun object
         const color = new Color("#FDB000");

@@ -3,6 +3,7 @@ import { Color, PointLight,
     HemisphereLightHelper, DirectionalLightHelper } from 'https://cdn.skypack.dev/three@0.137';
 
 class Light{
+    light: DirectionalLight;
     constructor() {        
         this.light = new DirectionalLight( 0xffffff, 1 );
         this.light.color.setHSL( 0.1, 1, 0.95 );
@@ -33,6 +34,8 @@ class Light{
 }
 
 class AmbLight{
+    light: AmbientLight;
+
     constructor() {
 
         this.light = new AmbientLight(0xffffff, 0.5)
@@ -44,6 +47,7 @@ class AmbLight{
 }
 
 class EnvironmentLight{
+    light: HemisphereLight;
     constructor() {
 
         this.light = new HemisphereLight( 0xffffff, 0xffffff, 0.6 );

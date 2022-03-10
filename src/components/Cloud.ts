@@ -1,7 +1,9 @@
-import { SphereGeometry, Mesh, MeshStandardMaterial } from 'https://cdn.skypack.dev/three@0.137';
+import { BufferGeometry, SphereGeometry, Mesh, MeshStandardMaterial } from 'https://cdn.skypack.dev/three@0.137';
 import { mergeBufferGeometries } from 'https://cdn.skypack.dev/three-stdlib@2.8.5/utils/BufferGeometryUtils';
 
 class Cloud {
+    geo: BufferGeometry;
+
     constructor() {
         this.geo = new SphereGeometry(0, 0, 0); 
         
@@ -25,20 +27,14 @@ class Cloud {
     }
 
     deploy() {
-        this.mesh = new Mesh(
+        return new Mesh(
             this.geo,
             new MeshStandardMaterial({
                 flatShading: true,
                 transparent: true,
-                opacity: 0.85,
+                opacity: 0.95,
             })
         );
-
-        return this.mesh;
-    }
-
-    move() {
-        this.mesh.position.x += 0.01;
     }
 }
 

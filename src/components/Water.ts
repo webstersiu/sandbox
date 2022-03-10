@@ -1,7 +1,9 @@
-import { Color, CylinderGeometry, RepeatWrapping, Mesh, MeshPhysicalMaterial, Vector2, TextureLoader } from 'https://cdn.skypack.dev/three@0.137';
+import { Color, CylinderGeometry, RepeatWrapping, Mesh, MeshPhysicalMaterial, Vector2 } from 'https://cdn.skypack.dev/three@0.137';
 import Base from './Base.js';
 
 class Water extends Base{
+    waterMesh:Mesh;
+
     constructor() {
         super();
         
@@ -17,7 +19,6 @@ class Water extends Base{
                 ior: 1.4,
                 transmission: 1,
                 transparent: true,
-                thickness: 1.5,
                 roughness: 1,
                 metalness: 0.025,
                 roughnessMap: waterTexture,

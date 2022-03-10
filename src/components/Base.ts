@@ -1,9 +1,11 @@
-import { TextureLoader} from 'https://cdn.skypack.dev/three@0.137';
+import { TextureLoader } from 'https://cdn.skypack.dev/three@0.137';
 
 class Base{
+    readonly MAX_HEIGHT: number = 10;
+    readonly MAX_WIDTH: number = 100;
+    textures: any;
+
     constructor() {
-        this.MAX_HEIGHT = 10;
-        
         this.textures = {
             dirt: new TextureLoader().load("../../assets/dirt_hd.jpg"),
             dirt2: new TextureLoader().load("../../assets/dirt2_hd.jpg"),

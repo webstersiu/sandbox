@@ -2,6 +2,8 @@ import { CylinderGeometry, DoubleSide, Mesh, MeshPhysicalMaterial } from 'https:
 import Base from './Base.js'
 
 class Foundation extends Base{
+    mapContainer: Mesh;
+    
     constructor(){
         super();
         
