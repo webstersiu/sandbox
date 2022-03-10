@@ -7,7 +7,7 @@
         "sourceMap": true,
         "moduleResolution": "node",
     },
-    "include": [ "src/**/*","types" ],
+    "include": [ "assets","src/**/*","types" ],
     "exclude": [
         "node_modules"
     ]

@@ -10,15 +10,3 @@ declare module 'https://cdn.skypack.dev/three@0.137' {
 }
 
 declare module 'https://cdn.skypack.dev/simplex-noise';
-
-// declare module 'https://cdn.skypack.dev/three-stdlib@2.8.5' {
-//   export * from 'three-stdlib';
-// }
-// declare module 'https://cdn.skypack.dev/three-stdlib@2.8.5/controls/OrbitControls' {
-//   export { OrbitControls } from 'three-stdlib';
-// }
-
-// declare module 'https://cdn.skypack.dev/three-stdlib@2.8.5/utils/BufferGeometryUtils' {
-//   export { mergeBufferGeometries } from 'three-stdlib';
-// }
-

@@ -49,6 +49,7 @@ class Land extends Base {
 
     hex(height:number, position:any) {
         let geo = this.hexGeometry(height, position);
+        geo.addEventListener( 'click', event => { console.log(geo) } );
 
         if(height > this.STONE_HEIGHT) {
             this._stoneGeo = mergeBufferGeometries([geo, this._stoneGeo]);
@@ -81,7 +82,7 @@ class Land extends Base {
         let mesh = new Mesh(geo, mat);
         mesh.castShadow = true; //default is false
         mesh.receiveShadow = true; //default
-      
+
         return mesh;
     }
 
@@ -102,7 +103,8 @@ class Land extends Base {
                 let noise = (simplex.noise2D(i * 0.1, j * 0.1) + 1) * 0.5;
                 noise = Math.pow(noise, 1.5);
         
-                this.hex(noise * this.MAX_HEIGHT, position);
+                // this.hex(noise * this.MAX_HEIGHT, position);
+                this.hex(2.5, position);
             }
         }
     }
