@@ -1,4 +1,4 @@
-import { Mesh, Color,  IcosahedronGeometry, MeshBasicMaterial, MeshPhysicalMaterial, FrontSide} from 'https://cdn.skypack.dev/three@0.137';
+import { Mesh, Color,  IcosahedronGeometry, MeshPhysicalMaterial, FrontSide} from 'https://cdn.skypack.dev/three@0.137';
 import Base from './Base.js'
 
 class Moon extends Base {

@@ -1,4 +1,4 @@
-import { Color, PointLight, 
+import { PointLight, 
     HemisphereLight, DirectionalLight, AmbientLight, Scene,
     HemisphereLightHelper, DirectionalLightHelper } from 'https://cdn.skypack.dev/three@0.137';
 
