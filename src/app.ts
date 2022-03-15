@@ -22,7 +22,7 @@ PostProcessing(scene, preProcessing.getCamera(), preProcessing.getRenderer(), bl
 
 new Background().deploy(scene);
 
-scene.add(new Floor().deploy());
+// scene.add(new Floor().deploy());
 //new Sun().deploy(scene);
 new Moon().deploy(scene);
 

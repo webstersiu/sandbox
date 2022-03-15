@@ -6,7 +6,6 @@ import Tree from './Tree.js';
 import Stone from './Stone.js';
 import Cloud from './Cloud.js';
 
-import * as sketch_json from '../../sketch/river.json';
 
 class Land extends Base {
     group: Group;

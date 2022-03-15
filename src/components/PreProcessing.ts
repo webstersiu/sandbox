@@ -40,11 +40,11 @@ class PreProcessing {
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
-        //new Light.EnvironmentLight().deploy(scene, true);
+        // new Light.EnvironmentLight().deploy(scene, true);
 
         new Light.AmbLight().deploy(scene);
         
-        //new Light.Light().deploy(scene, true);
+        new Light.Light().deploy(scene, true);
     }
 
     
