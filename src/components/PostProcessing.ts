@@ -6,8 +6,8 @@ import { UnrealBloomPass } from 'https://cdn.skypack.dev/three-stdlib@2.8.5/post
 
 let BLOOM_SCENE = 1;
 let bloom_pass_params = {
-        exposure: 1,
-        bloomStrength: 2.5,
+        exposure: 0.5,
+        bloomStrength: 2,
         bloomThreshold: 0,
         bloomRadius: 0
       };
@@ -18,8 +18,10 @@ var darkMaterial = createMaterial("basic", 0x000000, 0, false);
 
 export function PostProcessing(scene: Scene, camera: PerspectiveCamera, renderer: WebGLRenderer, bloomLayer: Layers, finalComposer: any, bloomComposer: any){
     bloomLayer.set(BLOOM_SCENE);
+
     let renderScene = new RenderPass( scene, camera );
-    let bloomPass = new UnrealBloomPass( new Vector2( innerWidth, innerHeight ), 1.5, 0.4, 0.85 );
+    let bloomPass = new UnrealBloomPass( new Vector2( innerWidth, innerHeight ), 0, 0, 0 );
+    bloomPass.exposure = bloom_pass_params.exposure;
     bloomPass.threshold = bloom_pass_params.bloomThreshold;
     bloomPass.strength = bloom_pass_params.bloomStrength;
     bloomPass.radius = bloom_pass_params.bloomRadius;
@@ -68,7 +70,8 @@ export function renderBloom(scene: Scene, bloomComposer: any, bloomLayer: Layers
       delete materials[ obj.uuid ];
 
   }
-  rednerer.setClearColor(new Color().setHSL( 0.6, 0, 0.5 ));
+
+  rednerer.setClearColor(new Color().setHSL( 0.6, 0, 1 ));
   } );
   
 }

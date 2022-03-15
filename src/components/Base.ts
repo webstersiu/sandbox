@@ -15,6 +15,7 @@ class Base{
             stone: new TextureLoader().load("../../assets/stone_hd.jpg"),
             snow: new TextureLoader().load("../../assets/snow_hd.png"),
             wood: new TextureLoader().load("../../assets/wood.jpg"),
+            moon: new TextureLoader().load("../../assets/moon.jpg")
         };
     }
 }

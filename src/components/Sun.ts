@@ -13,7 +13,7 @@ class Sun {
         
     }
 
-    deploy(scene, camera)
+    deploy(scene)
     {
         scene.add(this.sun);
         this.sun.layers.enable(1); 
