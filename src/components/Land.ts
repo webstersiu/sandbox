@@ -1,79 +1,79 @@
-import { CylinderGeometry, BoxGeometry, Mesh, MeshPhysicalMaterial, Vector2, BufferGeometry, Scene } from 'https://cdn.skypack.dev/three@0.137';
+import { CylinderGeometry, Group, BoxGeometry, Mesh, MeshPhysicalMaterial, Vector2, BufferGeometry, Color, RepeatWrapping } from 'https://cdn.skypack.dev/three@0.137';
 import { mergeBufferGeometries } from 'https://cdn.skypack.dev/three-stdlib@2.8.5/utils/BufferGeometryUtils';
 import SimplexNoise from 'https://cdn.skypack.dev/simplex-noise';
 import Base from './Base.js';
 import Tree from './Tree.js';
 import Stone from './Stone.js';
+import Cloud from './Cloud.js';
+
+import * as sketch_json from '../../sketch/river.json';
 
 class Land extends Base {
-    _stoneGeo: BufferGeometry;
-    _dirtGeo: BufferGeometry;
-    _dirt2Geo: BufferGeometry;
-    _sandGeo: BufferGeometry;
-    _grassGeo: BufferGeometry;
+    group: Group;
 
-    field: BoxGeometry;
+    waterGeo: BufferGeometry;
 
-    STONE_HEIGHT: number;
-    DIRT_HEIGHT: number;
-    GRASS_HEIGHT: number;
-    SAND_HEIGHT: number;
-    DIRT2_HEIGHT: number;
+    STONE_HEIGHT: number = this.MAX_HEIGHT * 0.8;
+    DIRT_HEIGHT: number = this.MAX_HEIGHT * 0.7;
+    GRASS_HEIGHT: number = this.MAX_HEIGHT * 0.5;
+    SAND_HEIGHT: number = this.MAX_HEIGHT * 0.3;
+    DIRT2_HEIGHT: number = this.MAX_HEIGHT * 0;
+
+    isHex: boolean = false;
 
     constructor() {
         super();
 
-        this._stoneGeo = new BoxGeometry(0,0,0);
-        this._dirtGeo = new BoxGeometry(0,0,0);
-        this._dirt2Geo = new BoxGeometry(0,0,0);
-        this._sandGeo = new BoxGeometry(0,0,0);
-        this._grassGeo = new BoxGeometry(0,0,0);
+        this.waterGeo = new BoxGeometry(0,0,0);
+        this.group = new Group();
 
-        this.field = new BoxGeometry(0,0,0);
-
-        this.STONE_HEIGHT = this.MAX_HEIGHT * 0.8;
-        this.DIRT_HEIGHT = this.MAX_HEIGHT * 0.7;
-        this.GRASS_HEIGHT = this.MAX_HEIGHT * 0.5;
-        this.SAND_HEIGHT = this.MAX_HEIGHT * 0.3;
-        this.DIRT2_HEIGHT = this.MAX_HEIGHT * 0;
-
-        this.gen();
+        // this.autoGen();
+        this.loadGeo();
     }
     
-    hexGeometry(height:number, position:any) {
-        let geo  = new CylinderGeometry(1, 1, height, 6, 1, false);
-        geo.translate(position.x, height * 0.5, position.y);
-      
-        return geo;
+    blockGeometry(height:number, position:any) {
+
+        if (this.isHex) {
+            // hex
+            let geo  = new CylinderGeometry(1, 1, height, 6, 1, false);
+            geo.translate(position.x, height * 0.5, position.y);
+            return geo;
+        } else {
+            // square
+            let geo = new BoxGeometry(1, height, 1);
+            geo.translate(position.x, height * 0.5, position.y);
+            return geo;
+        }
     }
 
-    hex(height:number, position:any) {
-        let geo = this.hexGeometry(height, position);
-        geo.addEventListener( 'click', event => { console.log(geo) } );
+    block(height:number, position:any) {
+        let geo = this.blockGeometry(height, position);
 
         if(height > this.STONE_HEIGHT) {
-            this._stoneGeo = mergeBufferGeometries([geo, this._stoneGeo]);
             if(Math.random() > 0.8) {
-                this._stoneGeo = mergeBufferGeometries([this._stoneGeo, new Stone(height, position).deploy()]);
+                this.group.add(this.blockMesh(mergeBufferGeometries([geo, new Stone(height, position).deploy()]), this.textures.stone));
             }
+            this.group.add(this.blockMesh(geo, this.textures.stone));
         } else if(height > this.DIRT_HEIGHT) {
-            this._dirtGeo = mergeBufferGeometries([geo, this._dirtGeo]);
             if(Math.random() > 0.8) {
-                this._grassGeo = mergeBufferGeometries([this._grassGeo, new Tree(height, position).deploy()]);
+                this.group.add(this.blockMesh(mergeBufferGeometries([geo, new Tree(height, position).deploy()]), this.textures.grass));
             }
+            this.group.add(this.blockMesh(geo, this.textures.dirt));
         } else if(height > this.GRASS_HEIGHT) {
-            this._grassGeo = mergeBufferGeometries([geo, this._grassGeo]);
+            this.group.add(this.blockMesh(geo, this.textures.grass));
         } else if(height > this.SAND_HEIGHT) { 
-            this._sandGeo = mergeBufferGeometries([geo, this._sandGeo]);
-            if(Math.random() > 0.8 && this._stoneGeo) {
-                this._stoneGeo = mergeBufferGeometries([this._stoneGeo, new Stone(height, position).deploy()]);
+            if(Math.random() > 0.8) {
+                this.group.add(this.blockMesh(mergeBufferGeometries([geo, new Stone(height, position).deploy()]), this.textures.stone));
             }
+            this.group.add(this.blockMesh(geo, this.textures.sand));
         } else if(height > this.DIRT2_HEIGHT) {
-            this._dirt2Geo = mergeBufferGeometries([geo, this._dirt2Geo]);
-        } 
+            this.group.add(this.blockMesh(geo, this.textures.dirt2));
+        }
+
+        this.waterGeo = mergeBufferGeometries([this.waterGeo, this.blockGeometry(2, position)]);
     }
       
-    hexMesh(geo:BufferGeometry, map:any) {
+    blockMesh(geo:BufferGeometry, map:any) {
         let mat = new MeshPhysicalMaterial({ 
             flatShading: true,
             map
@@ -86,35 +86,114 @@ class Land extends Base {
         return mesh;
     }
 
-    tileToPosition(tileX:number, tileY:number) {
-        return new Vector2((tileX + (tileY % 2) * 0.5) * 1.77, tileY * 1.535);
+    waterMesh(geo:BufferGeometry) {
+        let waterTexture = this.textures.water;
+        waterTexture.wrapS = RepeatWrapping;
+        waterTexture.wrapT = RepeatWrapping;
+
+        let mesh = new Mesh(
+            geo, 
+            new MeshPhysicalMaterial({
+                color: new Color("#55aaff").convertSRGBToLinear().multiplyScalar(3),
+                ior: 1.4,
+                transmission: 1,
+                transparent: true,
+                roughness: 0.5,
+                metalness: 0.025,
+                roughnessMap: waterTexture,
+                metalnessMap: waterTexture,
+            })
+        );
+        mesh.receiveShadow = true;
+        return mesh;
     }
 
-    gen() {
+    tileToPosition(tileX:number, tileY:number) {
+        if (this.isHex) {
+            // hex
+            return new Vector2((tileX + (tileY % 2) * 0.5) * 1.77, tileY * 1.535);
+        } else {
+            // square
+            return new Vector2(tileX + 2, tileY  + 2);
+        }
+    }
+
+    autoGen() {
         const simplex = new SimplexNoise(); // optional seed as a string parameter
+        // Cloud
+        let cloud_counter = Math.floor(Math.pow(Math.random(), 0.45) * 4);
+        let total_cloud = 0;
 
         // generate the foundation
-        for(let i = -20; i <= 20; i++) {
-            for(let j = -20; j <= 20; j++) {
+        for(let i = -10; i <= 10; i++) {
+            for(let j = -10; j <= 10; j++) {
                 let position = this.tileToPosition(i, j);
         
-                if(position.length() > 16) continue;
+                // if(position.length() > 16) continue;
                 
                 let noise = (simplex.noise2D(i * 0.1, j * 0.1) + 1) * 0.5;
                 noise = Math.pow(noise, 1.5);
         
-                // this.hex(noise * this.MAX_HEIGHT, position);
-                this.hex(2.5, position);
+                this.block(noise * this.MAX_HEIGHT, position);
+
+                if (Math.random() > 0.2 && total_cloud < cloud_counter) {
+                    this.group.add(new Cloud(this.MAX_HEIGHT, position).deploy());
+                    total_cloud++;
+                }
             }
         }
+
+        this.group.add(this.waterMesh(this.waterGeo));
     }
 
-    deploy(scene:Scene) {
-        scene.add(this.hexMesh(this._stoneGeo, this.textures.stone));
-        scene.add(this.hexMesh(this._grassGeo, this.textures.grass));
-        scene.add(this.hexMesh(this._dirt2Geo, this.textures.dirt2));
-        scene.add(this.hexMesh(this._dirtGeo, this.textures.dirt));
-        scene.add(this.hexMesh(this._sandGeo, this.textures.sand));
+    loadGeo() {
+        // Cloud
+        let cloud_counter = Math.floor(Math.pow(Math.random(), 0.45) * 4);
+        let total_cloud = 0;
+        let coor = [
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4,4],
+            [4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4,4,4],
+            [4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,2.5,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,3,4,4,4,4,4],
+            [4,4,4,4,4,3,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4,4],
+            [4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4,4,4],
+            [4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,2.5,4,4,4,4,4,4]
+        ];
+
+        const MEAN = (coor.length / 2 | 0);
+        for(let i = 0; i < coor.length; i++) {
+            for(let j = 0; j < coor[i].length; j++) {
+                let position = this.tileToPosition(i - MEAN, j - MEAN);
+        
+                // if(position.length() > 16) continue;
+                
+                this.block(coor[i][j], position);
+
+                if (Math.random() > 0.2 && total_cloud < cloud_counter) {
+                    this.group.add(new Cloud(this.MAX_HEIGHT, position).deploy());
+                    total_cloud++;
+                }
+            }
+        }
+        this.group.add(this.waterMesh(this.waterGeo));
+    }
+
+    deploy() {
+        return this.group;
     }
 }
 

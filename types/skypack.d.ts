@@ -5,8 +5,8 @@ declare module 'https://*';
 declare module 'https://cdn.skypack.dev/three@0.137' {
   export { 
     WebGLRenderer, ACESFilmicToneMapping, sRGBEncoding, Color, PerspectiveCamera, Scene, PCFSoftShadowMap, PointLight, DoubleSide,
-    RepeatWrapping, CylinderGeometry, TextureLoader, SphereGeometry, BoxGeometry, BufferGeometry,
-    Mesh, MeshStandardMaterial, MeshPhysicalMaterial, Vector2 } from 'three';
+    RepeatWrapping, CylinderGeometry, TextureLoader, SphereGeometry, BoxGeometry, BufferGeometry, 
+    Mesh, MeshStandardMaterial, MeshPhysicalMaterial, Vector2, Group } from 'three';
 }
 
 declare module 'https://cdn.skypack.dev/simplex-noise';

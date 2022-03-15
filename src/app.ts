@@ -5,8 +5,6 @@ import {
 } from 'https://cdn.skypack.dev/three@0.137';
 import { OrbitControls } from 'https://cdn.skypack.dev/three-stdlib@2.8.5/controls/OrbitControls';
 import Land from './components/Land.js';
-import Cloud from './components/Cloud.js';
-import Water from './components/Water.js';
 import Floor from './components/Floor.js';
 import Foundation from './components/Foundation.js';
 import Light from './components/Light.js';
@@ -32,21 +30,11 @@ controls.dampingFactor = 0.05;
 controls.enableDamping = true;
 
 (async function() {
-    new Land().deploy(scene);
-    scene.add(new Foundation().deploy());
-    scene.add(new Floor().deploy());
-
-    scene.add(new Water().deploy());
+    scene.add(new Land().deploy());
+    // scene.add(new Foundation().deploy());
+    // scene.add(new Floor().deploy());
     scene.add(new Light().deploy());
-    
-    // Cloud
-    let count = Math.floor(Math.pow(Math.random(), 0.45) * 4);
-    let clouds = [];
-    for(let i = 0; i < count; i++) {
-        clouds.push(new Cloud());
-        scene.add(clouds[clouds.length - 1].deploy());
-    }
-  
+      
     renderer.setAnimationLoop(() => {
         controls.update();
         renderer.render(scene, camera);

@@ -8,7 +8,7 @@ class Foundation extends Base{
         super();
         
         this.mapContainer = new Mesh(
-            new CylinderGeometry(17.1, 17.1, this.MAX_HEIGHT * 0.25, 50, 1, true),
+            new CylinderGeometry(10.1, 10.1, this.MAX_HEIGHT * 0.25, 50, 1, true),
             new MeshPhysicalMaterial({
                 map: this.textures.dirt,
                 side: DoubleSide,
