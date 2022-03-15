@@ -1,43 +1,39 @@
-import { 
-    WebGLRenderer, ACESFilmicToneMapping, sRGBEncoding, 
-    Color, PerspectiveCamera,
-    Scene, PCFSoftShadowMap,
-} from 'https://cdn.skypack.dev/three@0.137';
-import { OrbitControls } from 'https://cdn.skypack.dev/three-stdlib@2.8.5/controls/OrbitControls';
+import { Color,Scene, Layers ,PlaneGeometry, MeshLambertMaterial ,Mesh, Fog } from 'https://cdn.skypack.dev/three@0.137';
+import { EffectComposer } from 'https://cdn.skypack.dev/three-stdlib@2.8.5/postprocessing/EffectComposer';
+
 import Land from './components/Land.js';
 import Floor from './components/Floor.js';
 import Foundation from './components/Foundation.js';
-import Light from './components/Light.js';
 
+import Sun from './components/Sun.js';
+import PreProcessing from './components/PreProcessing.js';
+import { PostProcessing, disposeMaterial, renderBloom } from './components/PostProcessing.js';
+import Background from './components/Background.js';
+import Moon from './components/Moon.js';
+
+const bloomLayer = new Layers();
 const scene = new Scene();
-scene.background = new Color("#FFEECC");
 
-const camera = new PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 1000);
-camera.position.set(-17,31,33);
+const preProcessing = new PreProcessing(scene);
+const bloomComposer = new EffectComposer( preProcessing.getRenderer() );
+const finalComposer = new EffectComposer( preProcessing.getRenderer());
+PostProcessing(scene, preProcessing.getCamera(), preProcessing.getRenderer(), bloomLayer, finalComposer, bloomComposer);
 
-const renderer = new WebGLRenderer({ antialias: true });
-renderer.setSize(innerWidth, innerHeight);
-renderer.toneMapping = ACESFilmicToneMapping;
-renderer.outputEncoding = sRGBEncoding;
-renderer.physicallyCorrectLights = true;
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = PCFSoftShadowMap;
-document.body.appendChild(renderer.domElement);
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.target.set(0,0,0);
-controls.dampingFactor = 0.05;
-controls.enableDamping = true;
+new Background().deploy(scene);
+
+scene.add(new Floor().deploy());
+//new Sun().deploy(scene);
+new Moon().deploy(scene);
 
 (async function() {
     scene.add(new Land().deploy());
     // scene.add(new Foundation().deploy());
     // scene.add(new Floor().deploy());
-    scene.add(new Light().deploy());
-      
-    renderer.setAnimationLoop(() => {
-        controls.update();
-        renderer.render(scene, camera);
+    
+    scene.traverse( disposeMaterial );
+    preProcessing.getRenderer().setAnimationLoop(() => {
+        renderBloom(scene, bloomComposer, bloomLayer, preProcessing.getRenderer());
+        finalComposer.render();
     });
 })();
-  

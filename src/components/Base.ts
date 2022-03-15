@@ -15,6 +15,9 @@ class Base{
             sand: new TextureLoader().load(imgFolder + "sand.jpg"),
             water: new TextureLoader().load(imgFolder + "water.jpg"),
             stone: new TextureLoader().load(imgFolder + "stone.png"),
+            snow: new TextureLoader().load(imgFolder + "snow_hd.png"),
+            wood: new TextureLoader().load(imgFolder + "wood.jpg"),
+            moon: new TextureLoader().load(imgFolder + "moon.jpg")
         };
     }
 }
