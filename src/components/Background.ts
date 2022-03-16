@@ -15,7 +15,7 @@ class Background{
         this.ground = new Mesh( groundGeo, groundMat );
         this.ground.position.y = - 33;
         this.ground.rotation.x = - Math.PI / 2;
-        this.ground.receiveShadow = true;
+        //this.ground.receiveShadow = true;
 
 
         

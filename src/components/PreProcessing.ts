@@ -32,15 +32,15 @@ class PreProcessing {
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(innerWidth, innerHeight);
         this.renderer.toneMapping = ReinhardToneMapping;
-        this.renderer.setClearColor(0x000000);
+        //this.renderer.setClearColor(0x000000);
         this.renderer.physicallyCorrectLights = true;
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = PCFSoftShadowMap;
         document.body.appendChild(this.renderer.domElement);
 
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-
-        // new Light.EnvironmentLight().deploy(scene, true);
+        
+        //new Light.EnvironmentLight().deploy(scene, true);
 
         new Light.AmbLight().deploy(scene);
         

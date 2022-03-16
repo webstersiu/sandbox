@@ -8,7 +8,7 @@ declare module 'https://cdn.skypack.dev/three@0.137' {
     ReinhardToneMapping, 
     WebGLRenderer, ACESFilmicToneMapping, sRGBEncoding, Color, PerspectiveCamera, Scene, PCFSoftShadowMap,RepeatWrapping, Fog, 
     Mesh, MeshStandardMaterial, MeshPhysicalMaterial, MeshLambertMaterial, ShaderMaterial, MeshBasicMaterial, TextureLoader, 
-    Vector2, Layers, EventDispatcher, 
+    Vector2, Layers, EventDispatcher, Shape, ExtrudeGeometry, 
     CylinderGeometry, SphereGeometry, BoxGeometry, IcosahedronGeometry,PlaneGeometry, BufferGeometry,
     HemisphereLight, DirectionalLight,  AmbientLight, PointLight,
     HemisphereLightHelper, DirectionalLightHelper, Group} from 'three';

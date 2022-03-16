@@ -11,7 +11,7 @@ class Light{
         this.light.position.multiplyScalar( 30 );
 
         this.light.castShadow = true;
-        this.light.receiveShadow = true;
+        //this.light.receiveShadow = true;
         this.light.shadow.mapSize.width = 2048;
         this.light.shadow.mapSize.height = 2048;
 
