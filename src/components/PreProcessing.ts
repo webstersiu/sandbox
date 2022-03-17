@@ -26,7 +26,7 @@ class PreProcessing {
         // setup the main camera of the world
 
         this.camera = new PerspectiveCamera(45, innerWidth / innerHeight, 1, 200);
-        this.camera.position.set(0,10,20);
+        this.camera.position.set(30,50,50);
 
         this.renderer = new WebGLRenderer({ antialias: true });
         this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -42,12 +42,10 @@ class PreProcessing {
         
         //new Light.EnvironmentLight().deploy(scene, true);
 
-        new Light.AmbLight().deploy(scene);
+        // new Light.AmbLight().deploy(scene);
         
-        new Light.Light().deploy(scene, true);
+        new Light.Light().deploy(scene, false);
     }
-
-    
 }
 
 export default PreProcessing;

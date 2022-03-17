@@ -1,4 +1,4 @@
-import { Color,Scene, Layers ,PlaneGeometry, MeshLambertMaterial ,Mesh, Fog } from 'https://cdn.skypack.dev/three@0.137';
+import { Scene, Layers } from 'https://cdn.skypack.dev/three@0.137';
 import { EffectComposer } from 'https://cdn.skypack.dev/three-stdlib@2.8.5/postprocessing/EffectComposer';
 
 import Land from './components/Land.js';
@@ -17,9 +17,7 @@ const scene = new Scene();
 
 const preProcessing = new PreProcessing(scene);
 
-preProcessing.getOrbitControls().addEventListener( 'change', render );
-
-const bloomComposer = new EffectComposer( preProcessing.getRenderer() );
+const bloomComposer = new EffectComposer( preProcessing.getRenderer());
 const finalComposer = new EffectComposer( preProcessing.getRenderer());
 PostProcessing(scene, preProcessing.getCamera(), preProcessing.getRenderer(), bloomLayer, finalComposer, bloomComposer);
 
@@ -27,24 +25,19 @@ PostProcessing(scene, preProcessing.getCamera(), preProcessing.getRenderer(), bl
 new Background().deploy(scene);
 
 // scene.add(new Floor().deploy());
-new Sun().deploy(scene);
-new Moon().deploy(scene);
-new Star().deploy(scene);
+// new Sun().deploy(scene);
+// new Moon().deploy(scene);
+// new Star().deploy(scene);
 scene.add(new Land().deploy());
-    // scene.add(new Foundation().deploy());
-    // scene.add(new Floor().deploy());
+// scene.add(new Foundation().deploy());
+// scene.add(new Floor().deploy());
     
-    scene.traverse( disposeMaterial );
-
+scene.traverse( disposeMaterial );
+console.log(finalComposer);
 
 function render(){
-    renderBloom(scene, bloomComposer, bloomLayer, preProcessing.getRenderer());
+    // renderBloom(scene, bloomComposer, bloomLayer, preProcessing.getRenderer());
     finalComposer.render();
+    requestAnimationFrame(render);
 }
-
-// (async function() {
-    
-//     preProcessing.getRenderer().setAnimationLoop(() => {
-        
-//     });
-// })();
+render();
