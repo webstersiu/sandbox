@@ -5,7 +5,7 @@ declare module 'https://*';
 declare module 'https://cdn.skypack.dev/three@0.137' {
   export { 
     BackSide, FrontSide, DoubleSide,
-    ReinhardToneMapping, 
+    ReinhardToneMapping, AxesHelper,
     WebGLRenderer, ACESFilmicToneMapping, sRGBEncoding, Color, PerspectiveCamera, Scene, PCFSoftShadowMap,RepeatWrapping, Fog, 
     Mesh, MeshStandardMaterial, MeshPhysicalMaterial, MeshLambertMaterial, ShaderMaterial, MeshBasicMaterial, TextureLoader, 
     Vector2, Layers, EventDispatcher, Shape, ExtrudeGeometry, 

@@ -1,4 +1,5 @@
-import { Scene, Layers } from 'https://cdn.skypack.dev/three@0.137';
+import { Scene, Layers, PerspectiveCamera, WebGLRenderer, PointLight, Color } from 'https://cdn.skypack.dev/three@0.137';
+import { OrbitControls } from 'https://cdn.skypack.dev/three-stdlib@2.8.5/controls/OrbitControls';
 import { EffectComposer } from 'https://cdn.skypack.dev/three-stdlib@2.8.5/postprocessing/EffectComposer';
 
 import Land from './components/Land.js';
@@ -16,11 +17,13 @@ const bloomLayer = new Layers();
 const scene = new Scene();
 
 const preProcessing = new PreProcessing(scene);
+let renderer = preProcessing.getRenderer();
+const controls = preProcessing.getControl();
+const camera = preProcessing.getCamera();
 
-const bloomComposer = new EffectComposer( preProcessing.getRenderer());
-const finalComposer = new EffectComposer( preProcessing.getRenderer());
-PostProcessing(scene, preProcessing.getCamera(), preProcessing.getRenderer(), bloomLayer, finalComposer, bloomComposer);
-
+// const bloomComposer = new EffectComposer( preProcessing.getRenderer());
+// const finalComposer = new EffectComposer( preProcessing.getRenderer());
+// PostProcessing(scene, preProcessing.getCamera(), preProcessing.getRenderer(), bloomLayer, finalComposer, bloomComposer);
 
 new Background().deploy(scene);
 
@@ -32,12 +35,25 @@ scene.add(new Land().deploy());
 // scene.add(new Foundation().deploy());
 // scene.add(new Floor().deploy());
     
-scene.traverse( disposeMaterial );
-console.log(finalComposer);
+// scene.traverse( disposeMaterial );
 
-function render(){
-    // renderBloom(scene, bloomComposer, bloomLayer, preProcessing.getRenderer());
-    finalComposer.render();
+// function render(){
+//     // renderBloom(scene, bloomComposer, bloomLayer, preProcessing.getRenderer());
+//     finalComposer.render();
+//     requestAnimationFrame(render);
+// }
+// render();
+
+function render() {
+    controls.update();
     requestAnimationFrame(render);
+    renderer.render(scene, camera);
 }
+
+window.addEventListener('resize', function() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+})
+
 render();
