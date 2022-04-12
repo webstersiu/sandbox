@@ -1,4 +1,4 @@
-import { PerspectiveCamera, Scene, WebGLRenderer,ReinhardToneMapping,PCFSoftShadowMap, EventDispatcher, HemisphereLight } from 'https://cdn.skypack.dev/three@0.137';
+import { PerspectiveCamera, Scene, WebGLRenderer,ReinhardToneMapping,PCFSoftShadowMap, EventDispatcher, HemisphereLight, AxesHelper } from 'https://cdn.skypack.dev/three@0.137';
 import { OrbitControls } from 'https://cdn.skypack.dev/three-stdlib@2.8.5/controls/OrbitControls';
 import Light from './Light.js';
 
@@ -6,7 +6,9 @@ class PreProcessing {
 
     private camera : PerspectiveCamera;
     private renderer : WebGLRenderer;
-    private controls : EventDispatcher;
+    private controls : any;
+
+    private DEBUG_MODE: boolean = true;
 
     public getCamera(): PerspectiveCamera{
         return this.camera;
@@ -16,10 +18,13 @@ class PreProcessing {
         return this.renderer;
     }
 
-    public getOrbitControls(): EventDispatcher{
+    // public getOrbitControls(): EventDispatcher{
+    //     return this.controls;
+    // }
+
+    public getControl(): any {
         return this.controls;
     }
-
 
     
     constructor(scene: Scene) {
@@ -38,13 +43,23 @@ class PreProcessing {
         this.renderer.shadowMap.type = PCFSoftShadowMap;
         document.body.appendChild(this.renderer.domElement);
 
+
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        this.controls.target.set(0,0,0);
+        this.controls.dampingFactor = 0.05;
+        this.controls.enableDamping = true;
         
-        //new Light.EnvironmentLight().deploy(scene, true);
+        if (this.DEBUG_MODE) {
+            // for debugging
+            let axes = new AxesHelper(20);
+            scene.add(axes);
+        }
+
+        //new Light.EnvironmentLight().deploy(scene, this.DEBUG_MODE);
 
         // new Light.AmbLight().deploy(scene);
         
-        new Light.Light().deploy(scene, false);
+        new Light.Light().deploy(scene, this.DEBUG_MODE);
     }
 }
 

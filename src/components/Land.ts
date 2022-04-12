@@ -44,7 +44,6 @@ class Land extends Base {
     }
     
     blockGeometry(height:number, position:any) {
-
         if (this.isHex) {
             // hex
             let geo  = new CylinderGeometry(1, 1, height, 6, 1, false);
@@ -64,32 +63,28 @@ class Land extends Base {
         if(height > this.STONE_HEIGHT) {
             if(Math.random() > 0.8) {
                 this.stoneGeo = mergeBufferGeometries([this.stoneGeo, geo]);
-                // this.group.add(this.blockMesh(mergeBufferGeometries([geo, new Stone(height, position).deploy()]), this.textures.stone));
             }
             this.group.add(this.blockMesh(geo, this.textures.stone));
         } else if(height > this.DIRT_HEIGHT) {
             if(Math.random() > 0.8) {
                 this.grassGeo = mergeBufferGeometries([this.grassGeo, new Tree(height, position).deploy()]);
-                // this.group.add(this.blockMesh(mergeBufferGeometries([geo, new Tree(height, position).deploy()]), this.textures.grass));
             }
-            // this.group.add(this.blockMesh(geo, this.textures.dirt));
             this.dirtGeo = mergeBufferGeometries([this.dirtGeo, geo]);
         } else if(height > this.GRASS_HEIGHT) {
-            // this.group.add(this.blockMesh(geo, this.textures.grass));
             this.grassGeo = mergeBufferGeometries([this.grassGeo, geo]);
         } else if(height > this.SAND_HEIGHT) { 
             if(Math.random() > 0.8) {
-                // this.group.add(this.blockMesh(mergeBufferGeometries([geo, new Stone(height, position).deploy()]), this.textures.stone));
                 this.stoneGeo = mergeBufferGeometries([this.stoneGeo, new Stone(height, position).deploy()]);
             }
-            // this.group.add(this.blockMesh(geo, this.textures.sand));
             this.sandGeo = mergeBufferGeometries([this.sandGeo, geo]);
         } else if(height > this.DIRT2_HEIGHT) {
             this.group.add(this.blockMesh(geo, this.textures.dirt2));
         }
 
-        this.waterGeo = mergeBufferGeometries([this.waterGeo, this.blockGeometry(2, position)]);
-        this.glassGeo = mergeBufferGeometries([this.glassGeo, this.blockGeometry(10, position)]);
+        if(height < 2.2) {
+            this.waterGeo = mergeBufferGeometries([this.waterGeo, this.blockGeometry(2+Math.random(), position)]);
+        }
+        // this.glassGeo = mergeBufferGeometries([this.glassGeo, this.blockGeometry(10, position)]);
     }
       
     blockMesh(geo:BufferGeometry, map:any) {
@@ -129,15 +124,15 @@ class Land extends Base {
     
     glassMesh(geo:BufferGeometry) {
         let glassTexture = this.textures.glass;
-        // glassTexture.wrapS = RepeatWrapping;
-        // glassTexture.wrapT = RepeatWrapping;
+        glassTexture.wrapS = RepeatWrapping;
+        glassTexture.wrapT = RepeatWrapping;
 
         let material = new MeshPhysicalMaterial({
-            color: new Color("#ffffff").convertSRGBToLinear().multiplyScalar(3),
+            color: new Color("#FFEEEE").convertSRGBToLinear().multiplyScalar(3),
             ior: 1.4,
             transmission: 1,
             transparent: true,
-            opacity: 0.1,
+            opacity: 0.3,
             roughness: 0.5,
             metalness: 0.025,
             roughnessMap: glassTexture,
@@ -146,14 +141,7 @@ class Land extends Base {
 
         let mesh = new Mesh(geo, material);
         mesh.receiveShadow = true;
-        mesh.updateMatrix();
         return mesh;
-    }
-    
-    AddToGeometry(mainObject, objectToAdd) { 
-        objectToAdd.updateMatrix(); 
-        mainObject.geometry.merge(objectToAdd.geometry, objectToAdd.matrix); 
-        return mainObject;
     }
 
     tileToPosition(tileX:number, tileY:number) {
@@ -162,7 +150,7 @@ class Land extends Base {
             return new Vector2((tileX + (tileY % 2) * 0.5) * 1.77, tileY * 1.535);
         } else {
             // square
-            return new Vector2(tileX + 2, tileY  + 2);
+            return new Vector2(tileX, tileY);
         }
     }
 
@@ -192,7 +180,7 @@ class Land extends Base {
         }
 
         // this.group.add(this.waterMesh(this.waterGeo));
-        this.group.add(this.waterMesh(this.glassGeo));
+        // this.group.add(this.waterMesh(this.glassGeo));
     }
 
     loadGeo() {
@@ -212,13 +200,21 @@ class Land extends Base {
             [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
             [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
             [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4],
+            [4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4,4],
+            [4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,4,4,4,4,4,4,4,4],
+            [4,4,4,4,2,2,1,1,0.2,0.2,1,1,2,2,2.5,4,4,4,4,4,4]
         ];
 
-        const MEAN = (coor.length / 2 | 0);
         for(let i = 0; i < coor.length; i++) {
             for(let j = 0; j < coor[i].length; j++) {
-                let position = this.tileToPosition(i - MEAN, j - 6);
-        
+                let position = this.tileToPosition(i - (coor.length/2 | 0), j - (coor[i].length/2 | 0));
+
                 // if(position.length() > 16) continue;
                 
                 this.block(coor[i][j], position);
@@ -229,8 +225,12 @@ class Land extends Base {
                 // }
             }
         }
-        // this.group.add(this.waterMesh(this.waterGeo));
+        this.group.add(this.waterMesh(this.waterGeo));
         // this.group.add(this.glassMesh(this.glassGeo));
+
+        // let glassGeo = new BoxGeometry(12, 10, 20);
+        // glassGeo.translate(0, 5, 0);
+        // this.group.add(this.glassMesh(glassGeo));
     }
 
     deploy() {
